@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>InkSkript Money Map — Access</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink:    #1c1a16;
+    --paper:  #faf8f3;
+    --cream:  #f2ece0;
+    --gold:   #c9a84c;
+    --gold-l: #e8c96a;
+    --green:  #2d6a4f;
+    --green-l:#40916c;
+    --red:    #c0392b;
+    --muted:  #7a7268;
+    --border: #e2dace;
+    --white:  #ffffff;
+    --font-d: 'Playfair Display', Georgia, serif;
+    --font-b: 'DM Sans', sans-serif;
+    --font-m: 'DM Mono', monospace;
+    --r: 14px;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-b);
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ══════════════════════════════
+     LOGIN SCREEN
+  ══════════════════════════════ */
+  #login-screen {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background: var(--ink);
+    position: relative; overflow: hidden;
+  }
+  #login-screen::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 60%, rgba(201,168,76,0.15) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 20%, rgba(45,106,79,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .login-box {
+    background: rgba(250,248,243,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 40px 32px;
+    width: 100%; max-width: 380px;
+    position: relative; z-index: 1;
+    backdrop-filter: blur(10px);
+  }
+  .login-brand {
+    text-align: center; margin-bottom: 28px;
+  }
+  .login-brand .logo-text {
+    font-family: var(--font-d);
+    font-size: 1.3rem; font-weight: 900;
+    color: var(--paper); letter-spacing: -0.5px;
+  }
+  .login-brand .logo-text span { color: var(--gold); }
+  .login-brand .tagline {
+    font-size: 0.75rem; color: rgba(250,248,243,0.4);
+    margin-top: 4px; display: block;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  .login-title {
+    font-family: var(--font-d);
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--paper); text-align: center;
+    margin-bottom: 6px;
+  }
+  .login-title em { color: var(--gold); font-style: italic; }
+  .login-sub {
+    text-align: center; font-size: 0.82rem;
+    color: rgba(250,248,243,0.45); margin-bottom: 28px;
+  }
+
+  .field-label {
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: rgba(250,248,243,0.5); margin-bottom: 8px; display: block;
+  }
+  .pw-wrap {
+    display: flex; align-items: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; overflow: hidden;
+    margin-bottom: 16px; transition: border-color 0.2s;
+  }
+  .pw-wrap:focus-within { border-color: var(--gold); }
+  .pw-wrap input {
+    flex: 1; padding: 14px 16px;
+    background: transparent; border: none; outline: none;
+    color: var(--paper); font-family: var(--font-m);
+    font-size: 1rem; letter-spacing: 2px;
+  }
+  .pw-wrap input::placeholder { letter-spacing: 0; font-family: var(--font-b); font-size: 0.85rem; color: rgba(250,248,243,0.25); }
+  .pw-toggle {
+    padding: 14px 14px; cursor: pointer;
+    color: rgba(250,248,243,0.35); font-size: 1rem;
+    background: none; border: none; transition: color 0.2s;
+  }
+  .pw-toggle:hover { color: var(--gold); }
+
+  .login-btn {
+    width: 100%; padding: 14px;
+    background: var(--gold); color: var(--ink);
+    font-family: var(--font-b); font-weight: 700;
+    font-size: 0.95rem; border: none; border-radius: 10px;
+    cursor: pointer; transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .login-btn:hover { background: var(--gold-l); transform: translateY(-1px); }
+  .login-btn:active { transform: scale(0.98); }
+
+  .login-error {
+    text-align: center; font-size: 0.82rem;
+    color: #e57373; margin-top: 12px;
+    min-height: 20px; transition: opacity 0.2s;
+  }
+
+  .login-footer {
+    text-align: center; margin-top: 24px;
+    font-size: 0.75rem; color: rgba(250,248,243,0.25);
+  }
+  .login-footer a {
+    color: rgba(201,168,76,0.6); text-decoration: none;
+  }
+  .login-footer a:hover { color: var(--gold); }
+
+  /* shake animation */
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60%  { transform: translateX(-6px); }
+    40%,80%  { transform: translateX(6px); }
+  }
+  .shake { animation: shake 0.35s ease; }
+
+  /* ══════════════════════════════
+     ADMIN PANEL (hidden by default)
+  ══════════════════════════════ */
+  #admin-screen {
+    display: none;
+    min-height: 100vh;
+    background: var(--ink);
+    padding: 0;
+  }
+  .admin-bar {
+    background: rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .admin-bar .ab-title {
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .admin-inner { max-width: 480px; margin: 0 auto; padding: 32px 20px; }
+  .admin-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--r); padding: 24px 20px;
+    margin-bottom: 16px;
+  }
+  .admin-card h3 {
+    font-family: var(--font-d); color: var(--paper);
+    font-size: 1.1rem; margin-bottom: 6px;
+  }
+  .admin-card p { font-size: 0.82rem; color: rgba(250,248,243,0.45); margin-bottom: 16px; }
+  .admin-input {
+    width: 100%; padding: 12px 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; color: var(--paper);
+    font-family: var(--font-m); font-size: 0.95rem;
+    outline: none; margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+  .admin-input:focus { border-color: var(--gold); }
+  .admin-btn {
+    padding: 11px 22px; border-radius: 8px;
+    font-family: var(--font-b); font-weight: 600;
+    font-size: 0.88rem; cursor: pointer; border: none;
+    transition: all 0.15s;
+  }
+  .admin-btn-gold { background: var(--gold); color: var(--ink); }
+  .admin-btn-gold:hover { background: var(--gold-l); }
+  .admin-btn-outline {
+    background: transparent; color: rgba(250,248,243,0.5);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .admin-btn-outline:hover { color: var(--paper); border-color: rgba(255,255,255,0.3); }
+  .current-pw-display {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 8px; padding: 12px 16px;
+    font-family: var(--font-m); font-size: 1.1rem;
+    color: var(--gold); letter-spacing: 3px;
+    text-align: center; margin-bottom: 6px;
+  }
+  .admin-note {
+    font-size: 0.75rem; color: rgba(250,248,243,0.3);
+    text-align: center;
+  }
+  .success-msg {
+    background: rgba(45,106,79,0.15);
+    border: 1px solid rgba(45,106,79,0.3);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 0.82rem; color: #81c995;
+    margin-top: 10px; display: none;
+    text-align: center;
+  }
+
+  /* ══════════════════════════════
+     TOOLKIT (main app)
+  ══════════════════════════════ */
+  #toolkit-screen { display: none; }
+
+  .cover {
+    background: var(--ink); padding: 36px 20px 32px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(45,106,79,0.15) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .cover-inner { position: relative; z-index: 1; max-width: 500px; margin: 0 auto; }
+  .cover-brand { font-family: var(--font-d); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+  .cover h1 { font-family: var(--font-d); font-size: clamp(1.7rem,5vw,2.4rem); font-weight: 900; color: var(--paper); line-height: 1.15; margin-bottom: 8px; }
+  .cover h1 em { font-style: italic; color: var(--gold); }
+  .cover-sub { font-size: 0.82rem; color: rgba(250,248,243,0.45); margin-bottom: 18px; }
+  .month-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 100px; padding: 7px 16px; font-size: 0.8rem; color: rgba(250,248,243,0.6); }
+  .month-badge strong { color: var(--paper); }
+
+  /* top bar with logout */
+  .top-bar {
+    background: rgba(28,26,22,0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 8px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .top-bar span { font-size: 0.72rem; color: rgba(250,248,243,0.3); letter-spacing: 1px; text-transform: uppercase; }
+  .logout-btn {
+    font-size: 0.72rem; color: rgba(250,248,243,0.35);
+    background: none; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px; padding: 4px 12px; cursor: pointer;
+    font-family: var(--font-b); transition: all 0.15s;
+  }
+  .logout-btn:hover { color: var(--paper); border-color: rgba(255,255,255,0.25); }
+
+  /* tabs */
+  .tabs-wrap { background: var(--ink); border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 50; overflow-x: auto; }
+  .tabs { display: flex; max-width: 640px; margin: 0 auto; padding: 0 12px; }
+  .tab { flex: none; padding: 13px 15px; font-size: 0.78rem; font-weight: 500; color: rgba(250,248,243,0.4); cursor: pointer; border: none; background: none; font-family: var(--font-b); border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
+  .tab:hover { color: rgba(250,248,243,0.7); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* pages */
+  .page { display: none; max-width: 640px; margin: 0 auto; padding: 20px 16px 60px; }
+  .page.active { display: block; }
+
+  /* cards & inputs */
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; margin-bottom: 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.04); }
+  .card-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: block; }
+  .summary-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .summary-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 12px; text-align: center; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+  .summary-card .s-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+  .summary-card .s-val { font-family: var(--font-d); font-size: 1.1rem; font-weight: 700; }
+  .s-income .s-val { color: var(--green); }
+  .s-expense .s-val { color: var(--red); }
+  .s-balance .s-val { color: var(--gold); }
+  .progress-wrap { margin: 10px 0 4px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; }
+  .progress-track { height: 8px; background: var(--cream); border-radius: 100px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 100px; transition: width 0.6s ease; }
+  .fill-green { background: var(--green); }
+  .fill-gold  { background: var(--gold); }
+  .fill-red   { background: var(--red); }
+  .input-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .input-row:last-child { border-bottom: none; }
+  .input-row label { flex: 1; font-size: 0.88rem; color: var(--ink); }
+  .input-row label small { display: block; font-size: 0.72rem; color: var(--muted); }
+  .input-wrap { display: flex; align-items: center; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+  .currency { padding: 7px 8px; font-size: 0.78rem; font-weight: 600; color: var(--muted); background: rgba(0,0,0,0.03); border-right: 1px solid var(--border); font-family: var(--font-m); }
+  .input-wrap input { width: 110px; padding: 7px 10px; font-family: var(--font-m); font-size: 0.88rem; color: var(--ink); background: transparent; border: none; outline: none; }
+  .input-wrap input:focus { background: #fff; }
+  .sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .sec-head h2 { font-family: var(--font-d); font-size: 1.15rem; font-weight: 700; color: var(--ink); }
+  .sec-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .gold-bg  { background: rgba(201,168,76,0.15); }
+  .green-bg { background: rgba(45,106,79,0.12); }
+  .red-bg   { background: rgba(192,57,43,0.1); }
+  .susu-card { background: linear-gradient(135deg,rgba(45,106,79,0.06) 0%,rgba(201,168,76,0.08) 100%); border: 1px solid rgba(201,168,76,0.25); border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; }
+  .susu-card .sc-title { font-family: var(--font-d); font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .susu-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; }
+  .goal-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; margin-bottom: 12px; }
+  .goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .goal-name { font-weight: 600; font-size: 0.92rem; }
+  .goal-meta { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .goal-pct { font-family: var(--font-d); font-size: 1.1rem; font-weight: 700; color: var(--green); }
+  .bill-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .bill-item:last-child { border-bottom: none; }
+  .bill-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; background: white; }
+  .bill-check.checked { background: var(--green); border-color: var(--green); }
+  .bill-check.checked::after { content: '✓'; color: white; font-size: 0.65rem; font-weight: 700; }
+  .bill-name { flex: 1; font-size: 0.88rem; }
+  .bill-name small { display: block; font-size: 0.72rem; color: var(--muted); }
+  .bill-amt { font-family: var(--font-m); font-size: 0.85rem; font-weight: 500; }
+  .bill-due { font-size: 0.7rem; padding: 2px 8px; border-radius: 100px; font-weight: 600; }
+  .due-soon { background: rgba(192,57,43,0.1); color: var(--red); }
+  .due-ok   { background: rgba(45,106,79,0.1); color: var(--green); }
+  .week-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .week-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
+  .week-card .wk-title { font-size: 0.72rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .week-card .wk-total { font-family: var(--font-d); font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .wk-item { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 4px 0; border-bottom: 1px dashed var(--border); color: var(--muted); }
+  .wk-item span:last-child { font-family: var(--font-m); color: var(--ink); }
+  .mood-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .mood-btn { padding: 8px 14px; border-radius: 100px; background: var(--cream); border: 1px solid var(--border); font-size: 0.82rem; cursor: pointer; font-family: var(--font-b); transition: all 0.15s; }
+  .mood-btn:hover, .mood-btn.selected { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+  .reflection-q { margin-bottom: 14px; }
+  .reflection-q .rq-label { font-size: 0.82rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; display: block; }
+  .reflection-q textarea { width: 100%; min-height: 70px; padding: 10px 12px; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-b); font-size: 0.85rem; color: var(--ink); resize: vertical; outline: none; line-height: 1.5; }
+  .reflection-q textarea:focus { background: white; border-color: var(--gold); }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .fade-in { animation: fadeIn 0.45s ease forwards; }
+
+  @media (max-width: 400px) {
+    .summary-row { grid-template-columns: 1fr 1fr; }
+    .s-balance { display: none; }
+    .week-grid { grid-template-columns: 1fr; }
+    .login-box { padding: 32px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN SCREEN ══════════════ -->
+<div id="login-screen">
+  <div class="login-box fade-in">
+    <div class="login-brand">
+      <div class="logo-text">Ink<span>Skript</span> Co.</div>
+      <span class="tagline">Money Map · Ghana Budget Toolkit</span>
+    </div>
+    <div class="login-title">Enter Your <em>Access Code</em></div>
+    <p class="login-sub">You received this code after purchase. Check your WhatsApp or email.</p>
+
+    <label class="field-label" for="pw-input">Access Code</label>
+    <div class="pw-wrap" id="pw-wrap">
+      <input type="password" id="pw-input" placeholder="Enter your code" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="pw-toggle" onclick="togglePw()" title="Show/hide">👁</button>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Access My Toolkit →</button>
+    <div class="login-error" id="login-error"></div>
+
+    <div class="login-footer">
+      Purchased but lost your code? <a href="https://wa.me/233509521428" target="_blank">Message us on WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN SCREEN ══════════════ -->
+<div id="admin-screen">
+  <div class="admin-bar">
+    <span class="ab-title">⚙️ InkSkript Admin Panel</span>
+    <button class="admin-btn admin-btn-outline" onclick="logout()">← Exit</button>
+  </div>
+  <div class="admin-inner">
+    <div class="admin-card">
+      <h3>Current Access Password</h3>
+      <p>This is the password you share with customers who pay.</p>
+      <div class="current-pw-display" id="current-pw-display">moneymap25</div>
+      <div class="admin-note">Share this with paying customers only.</div>
+    </div>
+
+    <div class="admin-card">
+      <h3>Rotate Password</h3>
+      <p>Change the customer password monthly to lock out people who received it for free. Your admin password stays the same.</p>
+      <input class="admin-input" id="new-pw-input" type="text" placeholder="Type new customer password" autocomplete="off"/>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="admin-btn admin-btn-gold" onclick="rotatePassword()">Update Password</button>
+        <button class="admin-btn admin-btn-outline" onclick="generatePw()">Generate Random</button>
+      </div>
+      <div class="success-msg" id="rotate-success">✓ Password updated. Share the new code with this month's customers.</div>
+    </div>
+
+    <div class="admin-card">
+      <h3>How to Use This System</h3>
+      <p style="margin-bottom:8px;">1. Customer pays on Selar</p>
+      <p style="margin-bottom:8px;">2. Selar sends them this page's link automatically</p>
+      <p style="margin-bottom:8px;">3. You separately send them the current access code (via WhatsApp after confirming payment)</p>
+      <p style="margin-bottom:8px;">4. Each month, rotate the password — old sharers lose access</p>
+      <p>5. New buyers get the new code. Simple.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ TOOLKIT SCREEN ══════════════ -->
+<div id="toolkit-screen">
+
+  <div class="cover">
+    <div class="cover-inner">
+      <span class="cover-brand">InkSkript Co. · Money Map</span>
+      <h1>Your Ghana<br><em>Budget Toolkit</em></h1>
+      <p class="cover-sub">Track. Save. Stay in control — every month.</p>
+      <div class="month-badge">📅 <strong id="current-month">May 2025</strong> &nbsp;·&nbsp; Your personal copy</div>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span>🔒 Authenticated access</span>
+    <button class="logout-btn" onclick="logout()">Sign out</button>
+  </div>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab active" onclick="showPage('overview',this)">Overview</button>
+      <button class="tab" onclick="showPage('income',this)">Income</button>
+      <button class="tab" onclick="showPage('expenses',this)">Expenses</button>
+      <button class="tab" onclick="showPage('savings',this)">Savings</button>
+      <button class="tab" onclick="showPage('bills',this)">Bills</button>
+      <button class="tab" onclick="showPage('weekly',this)">Weekly</button>
+      <button class="tab" onclick="showPage('reflect',this)">Reflect</button>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="page-overview">
+    <div class="summary-row" style="margin-top:20px;">
+      <div class="summary-card s-income"><span class="s-label">Income</span><span class="s-val" id="ov-income">GH₵0</span></div>
+      <div class="summary-card s-expense"><span class="s-label">Spent</span><span class="s-val" id="ov-spent">GH₵0</span></div>
+      <div class="summary-card s-balance"><span class="s-label">Left</span><span class="s-val" id="ov-left">GH₵0</span></div>
+    </div>
+    <div class="card">
+      <span class="card-label">Budget Health</span>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Spending vs Income</span><span id="ov-pct">0%</span></div>
+        <div class="progress-track"><div class="progress-fill fill-green" id="ov-bar" style="width:0%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Savings Goal Progress</span><span id="ov-save-pct">0%</span></div>
+        <div class="progress-track"><div class="progress-fill fill-gold" id="ov-save-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="card-label">This Month at a Glance</span>
+      <div class="input-row"><label>Days into the month</label><span style="font-family:var(--font-m);font-weight:600;" id="days-count">— / 31</span></div>
+      <div class="input-row"><label>Bills paid this month</label><span style="font-family:var(--font-m);font-weight:600;" id="ov-bills">0 / 5</span></div>
+      <div class="input-row"><label>Savings goals active</label><span style="font-family:var(--font-m);font-weight:600;">3</span></div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--muted);text-align:center;margin-top:8px;">Fill in Income and Expenses to see your numbers update here.</p>
+  </div>
+
+  <!-- INCOME -->
+  <div class="page" id="page-income">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon green-bg">💰</div><h2>Income This Month</h2></div>
+      <div class="card">
+        <span class="card-label">Income Sources</span>
+        <div class="input-row"><label>Main salary / wages<small>After tax</small></label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="inc-salary"/></div></div>
+        <div class="input-row"><label>Freelance / side work</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="inc-freelance"/></div></div>
+        <div class="input-row"><label>Business income</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="inc-biz"/></div></div>
+        <div class="input-row"><label>Mobile money received</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="inc-momo"/></div></div>
+        <div class="input-row"><label>Other income</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="inc-other"/></div></div>
+      </div>
+      <div class="card" style="background:rgba(45,106,79,0.05);border-color:rgba(45,106,79,0.2);">
+        <span class="card-label">Total Income</span>
+        <div style="font-family:var(--font-d);font-size:2rem;font-weight:900;color:var(--green)" id="inc-total">GH₵ 0.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPENSES -->
+  <div class="page" id="page-expenses">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon red-bg">🧾</div><h2>Monthly Expenses</h2></div>
+      <div class="card">
+        <span class="card-label">Housing & Utilities</span>
+        <div class="input-row"><label>Rent</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-rent"/></div></div>
+        <div class="input-row"><label>Electricity (ECG)</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-ecg"/></div></div>
+        <div class="input-row"><label>Water</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-water"/></div></div>
+      </div>
+      <div class="card">
+        <span class="card-label">Food & Transport</span>
+        <div class="input-row"><label>Groceries / market</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-food"/></div></div>
+        <div class="input-row"><label>Eating out / chop bar</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-eating"/></div></div>
+        <div class="input-row"><label>Transport / trotro / fuel</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-transport"/></div></div>
+      </div>
+      <div class="card">
+        <span class="card-label">Airtime, Data & Other</span>
+        <div class="input-row"><label>Airtime &amp; data</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-data"/></div></div>
+        <div class="input-row"><label>School fees / education</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-school"/></div></div>
+        <div class="input-row"><label>Health / pharmacy</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-health"/></div></div>
+        <div class="input-row"><label>Family support</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-family"/></div></div>
+        <div class="input-row"><label>Miscellaneous</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="exp-misc"/></div></div>
+      </div>
+      <div class="card" style="background:rgba(192,57,43,0.05);border-color:rgba(192,57,43,0.2);">
+        <span class="card-label">Total Expenses</span>
+        <div style="font-family:var(--font-d);font-size:2rem;font-weight:900;color:var(--red)" id="exp-total">GH₵ 0.00</div>
+        <div style="margin-top:8px;font-size:0.82rem;color:var(--muted);">Balance: <strong id="exp-balance" style="color:var(--ink);">GH₵ 0.00</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVINGS -->
+  <div class="page" id="page-savings">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon gold-bg">🏦</div><h2>Savings & Susu</h2></div>
+      <div class="susu-card">
+        <div class="sc-title">🤝 Susu / Group Savings</div>
+        <p>Track your susu contributions separately from personal savings.</p>
+        <div class="input-row" style="border-bottom:1px solid rgba(201,168,76,0.2)"><label>Monthly susu contribution</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calcTotals()" id="sav-susu"/></div></div>
+        <div class="input-row" style="border:none"><label>Collection month<small>Your turn to collect</small></label><input type="text" placeholder="e.g. August" style="padding:7px 10px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.85rem;width:110px;outline:none;"/></div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-header"><div><div class="goal-name">🎓 School Fees</div><div class="goal-meta">Target: GH₵800 · Due: Aug 2025</div></div><div class="goal-pct" id="goal1-pct">0%</div></div>
+        <div class="input-row" style="border:none;padding:0 0 10px;"><label style="font-size:0.82rem;">Saved so far</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" max="800" oninput="updateGoal('goal1',this.value,800)" id="goal1-input"/></div></div>
+        <div class="progress-track"><div class="progress-fill fill-green" id="goal1-bar" style="width:0%"></div></div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-header"><div><div class="goal-name">✈️ Travel Fund</div><div class="goal-meta">Target: GH₵2,000 · Due: Dec 2025</div></div><div class="goal-pct" id="goal2-pct">0%</div></div>
+        <div class="input-row" style="border:none;padding:0 0 10px;"><label style="font-size:0.82rem;">Saved so far</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" max="2000" oninput="updateGoal('goal2',this.value,2000)" id="goal2-input"/></div></div>
+        <div class="progress-track"><div class="progress-fill fill-gold" id="goal2-bar" style="width:0%"></div></div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-header"><div><div class="goal-name">🛡️ Emergency Fund</div><div class="goal-meta">Target: GH₵500 · Rolling</div></div><div class="goal-pct" id="goal3-pct">0%</div></div>
+        <div class="input-row" style="border:none;padding:0 0 10px;"><label style="font-size:0.82rem;">Saved so far</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" max="500" oninput="updateGoal('goal3',this.value,500)" id="goal3-input"/></div></div>
+        <div class="progress-track"><div class="progress-fill fill-gold" id="goal3-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BILLS -->
+  <div class="page" id="page-bills">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon red-bg">📋</div><h2>Bills & Subscriptions</h2></div>
+      <p style="font-size:0.82rem;margin-bottom:16px;">Tap the circle to mark a bill as paid.</p>
+      <div class="card">
+        <span class="card-label">Fixed Monthly Bills</span>
+        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this)"></div><div class="bill-name">ECG Prepaid<small>Electricity</small></div><span class="bill-due due-soon">Due soon</span><span class="bill-amt">GH₵120</span></div>
+        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this)"></div><div class="bill-name">MTN Data Bundle<small>30GB monthly</small></div><span class="bill-due due-ok">Mid-month</span><span class="bill-amt">GH₵50</span></div>
+        <div class="bill-item"><div class="bill-check checked" onclick="toggleBill(this)"></div><div class="bill-name">Rent<small>1st of month</small></div><span class="bill-due due-ok">✓ Done</span><span class="bill-amt">GH₵800</span></div>
+        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this)"></div><div class="bill-name">School Fees<small>Due 15th</small></div><span class="bill-due due-soon">15th May</span><span class="bill-amt">GH₵200</span></div>
+        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this)"></div><div class="bill-name">Showmax<small>Entertainment</small></div><span class="bill-due due-ok">Mid-month</span><span class="bill-amt">GH₵45</span></div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <span class="card-label">Paid This Month</span>
+        <div style="font-family:var(--font-d);font-size:2.2rem;font-weight:900;" id="bills-count">1 / 5</div>
+        <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;">Total due: <strong>GH₵1,215</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY -->
+  <div class="page" id="page-weekly">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon gold-bg">📆</div><h2>Weekly Spending</h2></div>
+      <p style="font-size:0.82rem;margin-bottom:16px;">Break down spending week by week so nothing hides.</p>
+      <div class="week-grid">
+        <div class="week-card"><div class="wk-title">Week 1 · May 1–7</div><div class="wk-item"><span>Market</span><span>GH₵180</span></div><div class="wk-item"><span>Transport</span><span>GH₵60</span></div><div class="wk-item"><span>Airtime</span><span>GH₵20</span></div><div class="wk-item"><span>Eating out</span><span>GH₵45</span></div><div class="wk-total">GH₵ 305</div></div>
+        <div class="week-card"><div class="wk-title">Week 2 · May 8–14</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
+        <div class="week-card"><div class="wk-title">Week 3 · May 15–21</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
+        <div class="week-card"><div class="wk-title">Week 4 · May 22–31</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFLECT -->
+  <div class="page" id="page-reflect">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon gold-bg">✍🏾</div><h2>End-of-Month Reflection</h2></div>
+      <p style="font-size:0.82rem;margin-bottom:20px;">Honest reflection turns a budget into a habit.</p>
+      <div class="card">
+        <span class="card-label">How did this month feel?</span>
+        <div class="mood-row">
+          <button class="mood-btn" onclick="selectMood(this)">😊 In control</button>
+          <button class="mood-btn" onclick="selectMood(this)">😐 Okay-ish</button>
+          <button class="mood-btn" onclick="selectMood(this)">😬 Struggled</button>
+          <button class="mood-btn" onclick="selectMood(this)">😤 Overspent</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="reflection-q"><span class="rq-label">What did you spend the most on?</span><textarea placeholder="e.g. Transport and eating out were the biggest surprises..."></textarea></div>
+        <div class="reflection-q"><span class="rq-label">Did you meet your savings goal?</span><textarea placeholder="e.g. I saved GH₵150 but my goal was GH₵200..."></textarea></div>
+        <div class="reflection-q" style="margin-bottom:0"><span class="rq-label">One thing I'll do differently next month:</span><textarea placeholder="e.g. I will pack lunch 3 days a week..."></textarea></div>
+      </div>
+      <div class="card" style="text-align:center;background:linear-gradient(135deg,rgba(45,106,79,0.06),rgba(201,168,76,0.08));border-color:rgba(201,168,76,0.2);">
+        <div style="font-size:1.5rem;margin-bottom:6px;">🎉</div>
+        <div style="font-family:var(--font-d);font-weight:700;margin-bottom:4px;">You showed up for your money.</div>
+        <p style="font-size:0.82rem;">That's what this is about. See you next month.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end toolkit-screen -->
+
+<script>
+  // ── Passwords (in a real hosted version, this would be server-side) ──
+  // Admin password never changes. Customer password rotates monthly.
+  const ADMIN_PASSWORD = 'inkskript-admin';  // YOU change this to something private
+  let CUSTOMER_PASSWORD = localStorage.getItem('mm_customer_pw') || 'moneymap25';
+
+  // Update display
+  document.getElementById('current-pw-display').textContent = CUSTOMER_PASSWORD;
+
+  // ── Login ──
+  function doLogin() {
+    const input = document.getElementById('pw-input').value.trim();
+    const wrap  = document.getElementById('pw-wrap');
+    const err   = document.getElementById('login-error');
+
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      return;
+    }
+
+    if (input === CUSTOMER_PASSWORD) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('toolkit-screen').style.display = 'block';
+      setMonthInfo();
+      return;
+    }
+
+    // Wrong password
+    err.textContent = 'Incorrect code. Check your WhatsApp message from InkSkript Co.';
+    wrap.classList.add('shake');
+    setTimeout(() => wrap.classList.remove('shake'), 400);
+  }
+
+  function togglePw() {
+    const inp = document.getElementById('pw-input');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  function logout() {
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('toolkit-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('login-error').textContent = '';
+  }
+
+  // ── Admin: rotate password ──
+  function rotatePassword() {
+    const newPw = document.getElementById('new-pw-input').value.trim();
+    if (!newPw) return;
+    CUSTOMER_PASSWORD = newPw;
+    localStorage.setItem('mm_customer_pw', newPw);
+    document.getElementById('current-pw-display').textContent = newPw;
+    document.getElementById('new-pw-input').value = '';
+    const msg = document.getElementById('rotate-success');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 4000);
+  }
+
+  function generatePw() {
+    const words = ['mango','cedar','river','bloom','ghana','cedi','gold','susu','save','plan','april','june','july'];
+    const nums  = Math.floor(10 + Math.random() * 89);
+    const w1 = words[Math.floor(Math.random() * words.length)];
+    const w2 = words[Math.floor(Math.random() * words.length)];
+    document.getElementById('new-pw-input').value = w1 + '-' + w2 + nums;
+  }
+
+  // ── Month info ──
+  function setMonthInfo() {
+    const now   = new Date();
+    const month = now.toLocaleString('en-GB', { month: 'long', year: 'numeric' });
+    document.getElementById('current-month').textContent = month;
+    const day   = now.getDate();
+    const total = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    document.getElementById('days-count').textContent = day + ' / ' + total;
+  }
+
+  // ── Tabs ──
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // ── Calculations ──
+  function v(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+  function fmt(n) { return 'GH₵ ' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  function calcTotals() {
+    const income = v('inc-salary') + v('inc-freelance') + v('inc-biz') + v('inc-momo') + v('inc-other');
+    document.getElementById('inc-total').textContent = fmt(income);
+
+    const expenses = v('exp-rent') + v('exp-ecg') + v('exp-water') +
+      v('exp-food') + v('exp-eating') + v('exp-transport') +
+      v('exp-data') + v('exp-school') + v('exp-health') + v('exp-family') + v('exp-misc');
+    document.getElementById('exp-total').textContent = fmt(expenses);
+    document.getElementById('exp-balance').textContent = fmt(income - expenses);
+
+    document.getElementById('ov-income').textContent = 'GH₵' + Math.round(income).toLocaleString();
+    document.getElementById('ov-spent').textContent  = 'GH₵' + Math.round(expenses).toLocaleString();
+    document.getElementById('ov-left').textContent   = 'GH₵' + Math.round(income - expenses).toLocaleString();
+
+    const pct = income > 0 ? Math.min(100, Math.round(expenses / income * 100)) : 0;
+    document.getElementById('ov-pct').textContent = pct + '%';
+    const bar = document.getElementById('ov-bar');
+    bar.style.width = pct + '%';
+    bar.className = 'progress-fill ' + (pct > 90 ? 'fill-red' : pct > 70 ? 'fill-gold' : 'fill-green');
+
+    const susu = v('sav-susu');
+    const sp = income > 0 ? Math.min(100, Math.round(susu / income * 100)) : 0;
+    document.getElementById('ov-save-pct').textContent = sp + '%';
+    document.getElementById('ov-save-bar').style.width = sp + '%';
+  }
+
+  function updateGoal(id, val, target) {
+    const pct = Math.min(100, Math.round(parseFloat(val || 0) / target * 100));
+    document.getElementById(id + '-pct').textContent = pct + '%';
+    document.getElementById(id + '-bar').style.width = pct + '%';
+    const total = (parseFloat(document.getElementById('goal1-input')?.value)||0)
+      + (parseFloat(document.getElementById('goal2-input')?.value)||0)
+      + (parseFloat(document.getElementById('goal3-input')?.value)||0);
+    const sp = Math.min(100, Math.round(total / 3300 * 100));
+    document.getElementById('ov-save-pct').textContent = sp + '%';
+    document.getElementById('ov-save-bar').style.width = sp + '%';
+  }
+
+  let paidCount = 1;
+  function toggleBill(el) {
+    el.classList.toggle('checked');
+    paidCount = document.querySelectorAll('.bill-check.checked').length;
+    document.getElementById('bills-count').textContent = paidCount + ' / 5';
+    document.getElementById('ov-bills').textContent = paidCount + ' / 5';
+  }
+
+  function selectMood(el) {
+    document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>
