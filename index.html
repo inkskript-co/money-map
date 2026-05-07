@@ -366,18 +366,26 @@
   <div class="page" id="page-bills">
     <div style="margin-top:20px;">
       <div class="sec-head"><div class="sec-icon red-bg">📋</div><h2>Bills & Subscriptions</h2></div>
-      <p style="font-size:0.82rem;margin-bottom:16px;">Tap the circle to mark a bill as paid.</p>
-      <div class="card">
-        <span class="card-label">Fixed Monthly Bills</span>
-        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this,'b1')" id="b1"></div><div class="bill-name">ECG Prepaid<small>Electricity</small></div><span class="bill-due due-soon">Due soon</span><span class="bill-amt">GH₵120</span></div>
-        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this,'b2')" id="b2"></div><div class="bill-name">MTN Data Bundle<small>Monthly</small></div><span class="bill-due due-ok">Mid-month</span><span class="bill-amt">GH₵50</span></div>
-        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this,'b3')" id="b3"></div><div class="bill-name">Rent<small>1st of month</small></div><span class="bill-due due-ok">1st</span><span class="bill-amt">GH₵800</span></div>
-        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this,'b4')" id="b4"></div><div class="bill-name">School Fees<small>Due 15th</small></div><span class="bill-due due-soon">15th</span><span class="bill-amt">GH₵200</span></div>
-        <div class="bill-item"><div class="bill-check" onclick="toggleBill(this,'b5')" id="b5"></div><div class="bill-name">Showmax<small>Entertainment</small></div><span class="bill-due due-ok">Mid-month</span><span class="bill-amt">GH₵45</span></div>
+      <p style="font-size:0.82rem;margin-bottom:16px;">Add your own bills. Tap the circle to mark as paid.</p>
+
+      <!-- Add bill form -->
+      <div class="card" style="margin-bottom:14px;">
+        <span class="card-label">Add a Bill</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+          <input type="text" id="new-bill-name" placeholder="Bill name (e.g. Rent)" style="flex:1;min-width:120px;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.85rem;outline:none;"/>
+          <div class="input-wrap" style="flex-shrink:0;"><span class="currency">GH₵</span><input type="number" id="new-bill-amt" placeholder="0.00" style="width:90px;padding:7px 10px;font-family:var(--font-m);font-size:0.85rem;background:transparent;border:none;outline:none;"/></div>
+        </div>
+        <button onclick="addBill()" style="width:100%;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-family:var(--font-b);font-weight:600;font-size:0.88rem;cursor:pointer;">+ Add Bill</button>
       </div>
+
+      <div class="card">
+        <span class="card-label">Your Bills</span>
+        <div id="bills-list"><p style="font-size:0.82rem;color:var(--muted);padding:8px 0;">No bills added yet. Add your first bill above.</p></div>
+      </div>
+
       <div class="card" style="text-align:center;">
         <span class="card-label">Paid This Month</span>
-        <div style="font-family:var(--font-d);font-size:2.2rem;font-weight:900;" id="bills-count">0 / 5</div>
+        <div style="font-family:var(--font-d);font-size:2.2rem;font-weight:900;" id="bills-count">0 / 0</div>
       </div>
     </div>
   </div>
@@ -521,13 +529,7 @@
         susu: v('sav-susu'), susu_month: document.getElementById('sav-susu-month')?.value || '',
         goal1: v('goal1-input'), goal2: v('goal2-input'), goal3: v('goal3-input')
       },
-      bills: {
-        b1: document.getElementById('b1')?.classList.contains('checked'),
-        b2: document.getElementById('b2')?.classList.contains('checked'),
-        b3: document.getElementById('b3')?.classList.contains('checked'),
-        b4: document.getElementById('b4')?.classList.contains('checked'),
-        b5: document.getElementById('b5')?.classList.contains('checked'),
-      },
+      bills: bills,
       reflect: {
         q1: document.getElementById('ref-q1')?.value || '',
         q2: document.getElementById('ref-q2')?.value || '',
@@ -555,7 +557,7 @@
     // Savings
     if (d.savings) { setVal('sav-susu', d.savings.susu); if (d.savings.susu_month) document.getElementById('sav-susu-month').value = d.savings.susu_month; setVal('goal1-input', d.savings.goal1); setVal('goal2-input', d.savings.goal2); setVal('goal3-input', d.savings.goal3); updateGoal('goal1', d.savings.goal1, 800); updateGoal('goal2', d.savings.goal2, 2000); updateGoal('goal3', d.savings.goal3, 500); }
     // Bills
-    if (d.bills) { ['b1','b2','b3','b4','b5'].forEach(b => { if (d.bills[b]) { document.getElementById(b)?.classList.add('checked'); } }); updateBillCount(); }
+    if (d.bills && Array.isArray(d.bills)) { bills = d.bills; renderBills(); }
     // Reflect
     if (d.reflect) { if (d.reflect.q1) document.getElementById('ref-q1').value = d.reflect.q1; if (d.reflect.q2) document.getElementById('ref-q2').value = d.reflect.q2; if (d.reflect.q3) document.getElementById('ref-q3').value = d.reflect.q3; if (d.reflect.mood) { document.querySelectorAll('.mood-btn').forEach(b => { if (b.textContent === d.reflect.mood) b.classList.add('selected'); }); } }
 
@@ -643,16 +645,56 @@
     document.getElementById('ov-save-bar').style.width = sp + '%';
   }
 
-  function toggleBill(el, id) {
-    el.classList.toggle('checked');
+  // ── Dynamic Bills ──
+  let bills = []; // [{id, name, amt, paid}]
+
+  function addBill() {
+    const name = document.getElementById('new-bill-name').value.trim();
+    const amt  = parseFloat(document.getElementById('new-bill-amt').value) || 0;
+    if (!name) return;
+    bills.push({ id: Date.now(), name, amt, paid: false });
+    document.getElementById('new-bill-name').value = '';
+    document.getElementById('new-bill-amt').value = '';
+    renderBills();
     scheduleSave();
+  }
+
+  function toggleBill(id) {
+    const bill = bills.find(b => b.id === id);
+    if (bill) bill.paid = !bill.paid;
+    renderBills();
+    scheduleSave();
+  }
+
+  function deleteBill(id) {
+    bills = bills.filter(b => b.id !== id);
+    renderBills();
+    scheduleSave();
+  }
+
+  function renderBills() {
+    const list = document.getElementById('bills-list');
+    if (bills.length === 0) {
+      list.innerHTML = '<p style="font-size:0.82rem;color:var(--muted);padding:8px 0;">No bills added yet.</p>';
+      updateBillCount();
+      return;
+    }
+    list.innerHTML = bills.map(b => `
+      <div class="bill-item">
+        <div class="bill-check ${b.paid ? 'checked' : ''}" onclick="toggleBill(${b.id})"></div>
+        <div class="bill-name">${b.name}</div>
+        <span class="bill-amt">GH₵${b.amt.toFixed(2)}</span>
+        <span onclick="deleteBill(${b.id})" style="cursor:pointer;color:var(--muted);font-size:1rem;padding:0 4px;">✕</span>
+      </div>
+    `).join('');
     updateBillCount();
   }
 
   function updateBillCount() {
-    const count = document.querySelectorAll('.bill-check.checked').length;
-    document.getElementById('bills-count').textContent = count + ' / 5';
-    document.getElementById('ov-bills').textContent = count + ' / 5';
+    const paid  = bills.filter(b => b.paid).length;
+    const total = bills.length;
+    document.getElementById('bills-count').textContent = paid + ' / ' + total;
+    document.getElementById('ov-bills').textContent = paid + ' / ' + total;
   }
 
   function selectMood(el) {
