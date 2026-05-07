@@ -218,7 +218,6 @@
       <button class="tab" onclick="showPage('income',this)">Income</button>
       <button class="tab" onclick="showPage('budget',this)">Budget</button>
       <button class="tab" onclick="showPage('daily',this)">Daily Log</button>
-      <button class="tab" onclick="showPage('bills',this)">Bills</button>
       <button class="tab" onclick="showPage('savings',this)">Savings</button>
       <button class="tab" onclick="showPage('summary',this)">Summary</button>
       <button class="tab" onclick="showPage('reflect',this)">Reflect</button>
@@ -246,7 +245,6 @@
     <div class="card">
       <span class="card-label">This Month</span>
       <div class="input-row"><label>Days into month</label><span style="font-family:var(--font-m);font-weight:600;" id="days-count">—</span></div>
-      <div class="input-row"><label>Bills paid</label><span style="font-family:var(--font-m);font-weight:600;" id="ov-bills">0 / 0</span></div>
       <div class="input-row"><label>Entries logged</label><span style="font-family:var(--font-m);font-weight:600;" id="ov-entries">0</span></div>
     </div>
   </div>
@@ -320,30 +318,6 @@
     </div>
   </div>
 
-  <!-- BILLS -->
-  <div class="page" id="page-bills">
-    <div style="margin-top:20px;">
-      <div class="sec-head"><div class="sec-icon red-bg">📋</div><h2>Bills & Subscriptions</h2></div>
-      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;">Add your fixed monthly bills. Tap circle to mark as paid.</p>
-      <div class="card">
-        <span class="card-label">Add a Bill</span>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
-          <input type="text" id="new-bill-name" placeholder="Bill name (e.g. Rent)" style="flex:1;min-width:120px;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;"/>
-          <div class="input-wrap"><span class="currency">GH₵</span><input type="number" id="new-bill-amt" placeholder="0.00" style="width:90px;padding:7px 10px;font-family:var(--font-m);font-size:.85rem;background:transparent;border:none;outline:none;"/></div>
-        </div>
-        <button class="big-btn" onclick="addBill()">+ Add Bill</button>
-      </div>
-      <div class="card">
-        <span class="card-label">Your Bills</span>
-        <div id="bills-list"><p style="font-size:.82rem;color:var(--muted);padding:8px 0;">No bills added yet.</p></div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <span class="card-label">Paid This Month</span>
-        <div style="font-family:var(--font-d);font-size:2.2rem;font-weight:900;" id="bills-count">0 / 0</div>
-      </div>
-    </div>
-  </div>
-
   <!-- SAVINGS -->
   <div class="page" id="page-savings">
     <div style="margin-top:20px;">
@@ -354,21 +328,16 @@
         <div class="input-row" style="border-bottom:1px solid rgba(201,168,76,.2)"><label>Monthly contribution</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="sav-susu"/></div></div>
         <div class="input-row" style="border:none"><label>Collection month<small>Your turn</small></label><input type="text" id="sav-susu-month" placeholder="e.g. August" oninput="scheduleSave()" style="padding:7px 10px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;width:110px;outline:none;"/></div>
       </div>
-      <div class="goal-card">
-        <div class="goal-header"><div><div class="goal-name">🎓 School Fees</div><div class="goal-meta">Target: GH₵800</div></div><div class="goal-pct" id="goal1-pct">0%</div></div>
-        <div class="input-row" style="border:none;padding:0 0 10px;"><label style="font-size:.82rem;">Saved so far</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="updateGoal('goal1',this.value,800);scheduleSave()" id="goal1-input"/></div></div>
-        <div class="progress-track"><div class="progress-fill fill-green" id="goal1-bar" style="width:0%"></div></div>
+      <div class="card">
+        <span class="card-label">Add a Savings Goal</span>
+        <input type="text" id="new-goal-name" placeholder="Goal name (e.g. School Fees, Car, Holiday)" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;margin-bottom:8px;"/>
+        <div style="display:flex;gap:8px;margin-bottom:6px;">
+          <div class="input-wrap" style="flex:1;"><span class="currency" style="white-space:nowrap;font-size:.72rem;">Target GH₵</span><input type="number" id="new-goal-target" placeholder="0.00" style="width:100%;padding:7px 10px;font-family:var(--font-m);font-size:.85rem;background:transparent;border:none;outline:none;"/></div>
+          <div class="input-wrap" style="flex:1;"><span class="currency" style="white-space:nowrap;font-size:.72rem;">Saved GH₵</span><input type="number" id="new-goal-saved" placeholder="0.00" style="width:100%;padding:7px 10px;font-family:var(--font-m);font-size:.85rem;background:transparent;border:none;outline:none;"/></div>
+        </div>
+        <button class="big-btn" onclick="addGoal()">+ Add Goal</button>
       </div>
-      <div class="goal-card">
-        <div class="goal-header"><div><div class="goal-name">✈️ Travel Fund</div><div class="goal-meta">Target: GH₵2,000</div></div><div class="goal-pct" id="goal2-pct">0%</div></div>
-        <div class="input-row" style="border:none;padding:0 0 10px;"><label style="font-size:.82rem;">Saved so far</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="updateGoal('goal2',this.value,2000);scheduleSave()" id="goal2-input"/></div></div>
-        <div class="progress-track"><div class="progress-fill fill-gold" id="goal2-bar" style="width:0%"></div></div>
-      </div>
-      <div class="goal-card">
-        <div class="goal-header"><div><div class="goal-name">🛡️ Emergency Fund</div><div class="goal-meta">Target: GH₵500</div></div><div class="goal-pct" id="goal3-pct">0%</div></div>
-        <div class="input-row" style="border:none;padding:0 0 10px;"><label style="font-size:.82rem;">Saved so far</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="updateGoal('goal3',this.value,500);scheduleSave()" id="goal3-input"/></div></div>
-        <div class="progress-track"><div class="progress-fill fill-gold" id="goal3-bar" style="width:0%"></div></div>
-      </div>
+      <div id="goals-list"></div>
       <div class="save-indicator" id="save-savings">✓ Saved</div>
     </div>
   </div>
@@ -489,7 +458,7 @@
     const monthData = {
       income: { salary:v('inc-salary'),freelance:v('inc-freelance'),biz:v('inc-biz'),momo:v('inc-momo'),other:v('inc-other') },
       budget: { food:v('bud-food'),transport:v('bud-transport'),data:v('bud-data'),health:v('bud-health'),personal:v('bud-personal'),family:v('bud-family'),other:v('bud-other') },
-      savings: { susu:v('sav-susu'),susu_month:document.getElementById('sav-susu-month')?.value||'',goal1:v('goal1-input'),goal2:v('goal2-input'),goal3:v('goal3-input') },
+      savings: { susu:v('sav-susu'),susu_month:document.getElementById('sav-susu-month')?.value||'',goals:goals },
       bills, entries,
       reflect: { q1:document.getElementById('ref-q1')?.value||'',q2:document.getElementById('ref-q2')?.value||'',q3:document.getElementById('ref-q3')?.value||'',mood:document.querySelector('.mood-btn.selected')?.textContent||'' }
     };
@@ -521,7 +490,7 @@
      'sav-susu','goal1-input','goal2-input','goal3-input'].forEach(id => {
       const el=document.getElementById(id); if(el) el.value='';
     });
-    bills=[]; entries=[];
+    bills=[]; entries=[]; goals=[];
     document.getElementById('ref-q1').value='';
     document.getElementById('ref-q2').value='';
     document.getElementById('ref-q3').value='';
@@ -530,9 +499,10 @@
     if (!d) { renderBills(); renderEntries(); calc(); renderSummary(); return; }
     if (d.income) { setVal('inc-salary',d.income.salary);setVal('inc-freelance',d.income.freelance);setVal('inc-biz',d.income.biz);setVal('inc-momo',d.income.momo);setVal('inc-other',d.income.other); }
     if (d.budget) { setVal('bud-food',d.budget.food);setVal('bud-transport',d.budget.transport);setVal('bud-data',d.budget.data);setVal('bud-health',d.budget.health);setVal('bud-personal',d.budget.personal);setVal('bud-family',d.budget.family);setVal('bud-other',d.budget.other); }
-    if (d.savings) { setVal('sav-susu',d.savings.susu);if(d.savings.susu_month)document.getElementById('sav-susu-month').value=d.savings.susu_month;setVal('goal1-input',d.savings.goal1);setVal('goal2-input',d.savings.goal2);setVal('goal3-input',d.savings.goal3);updateGoal('goal1',d.savings.goal1,800);updateGoal('goal2',d.savings.goal2,2000);updateGoal('goal3',d.savings.goal3,500); }
-    if (d.bills&&Array.isArray(d.bills)) { bills=d.bills; } renderBills();
+    if (d.savings) { setVal('sav-susu',d.savings.susu);if(d.savings.susu_month)document.getElementById('sav-susu-month').value=d.savings.susu_month;if(d.savings.goals&&Array.isArray(d.savings.goals)){goals=d.savings.goals;renderGoals();calcSavingsOverview();} }
+    bills=[];
     if (d.entries&&Array.isArray(d.entries)) { entries=d.entries; } renderEntries();
+    if (d.savings&&d.savings.goals&&Array.isArray(d.savings.goals)){goals=d.savings.goals;}else{goals=[];} renderGoals(); calcSavingsOverview();
     if (d.reflect) { if(d.reflect.q1)document.getElementById('ref-q1').value=d.reflect.q1;if(d.reflect.q2)document.getElementById('ref-q2').value=d.reflect.q2;if(d.reflect.q3)document.getElementById('ref-q3').value=d.reflect.q3;if(d.reflect.mood)document.querySelectorAll('.mood-btn').forEach(b=>{if(b.textContent===d.reflect.mood)b.classList.add('selected');}); }
     calc(); renderSummary();
     // Update readonly state
@@ -617,35 +587,69 @@
     document.getElementById('ov-save-bar').style.width=sp+'%';
   }
 
-  function updateGoal(id,val,target) {
-    const pct=Math.min(100,Math.round(parseFloat(val||0)/target*100));
-    document.getElementById(id+'-pct').textContent=pct+'%';
-    document.getElementById(id+'-bar').style.width=pct+'%';
+  // ── Custom Savings Goals ──
+  let goals = [];
+
+  function addGoal() {
+    const name = document.getElementById('new-goal-name').value.trim();
+    const target = parseFloat(document.getElementById('new-goal-target').value) || 0;
+    const saved = parseFloat(document.getElementById('new-goal-saved').value) || 0;
+    if (!name || !target) return;
+    goals.push({ id: Date.now(), name, target, saved });
+    document.getElementById('new-goal-name').value = '';
+    document.getElementById('new-goal-target').value = '';
+    document.getElementById('new-goal-saved').value = '';
+    renderGoals(); calcSavingsOverview(); scheduleSave();
   }
 
-  function addBill() {
-    const name=document.getElementById('new-bill-name').value.trim(), amt=parseFloat(document.getElementById('new-bill-amt').value)||0;
-    if(!name)return;
-    bills.push({id:Date.now(),name,amt,paid:false});
-    document.getElementById('new-bill-name').value='';document.getElementById('new-bill-amt').value='';
-    renderBills();scheduleSave();
+  function updateGoalSaved(id, val) {
+    const g = goals.find(g => g.id === id);
+    if (g) { g.saved = parseFloat(val) || 0; }
+    calcSavingsOverview(); scheduleSave();
   }
 
-  function toggleBill(id){const b=bills.find(b=>b.id===id);if(b)b.paid=!b.paid;renderBills();scheduleSave();}
-  function deleteBill(id){bills=bills.filter(b=>b.id!==id);renderBills();scheduleSave();}
-
-  function renderBills() {
-    const list=document.getElementById('bills-list');
-    if(!bills.length){list.innerHTML='<p style="font-size:.82rem;color:var(--muted);padding:8px 0;">No bills added yet.</p>';updateBillCount();return;}
-    list.innerHTML=bills.map(b=>`<div class="bill-item"><div class="bill-check ${b.paid?'checked':''}" onclick="toggleBill(${b.id})"></div><div class="bill-name">${b.name}</div><span class="bill-amt">GH₵${parseFloat(b.amt).toFixed(2)}</span><span onclick="deleteBill(${b.id})" style="cursor:pointer;color:var(--muted);font-size:.9rem;padding:0 4px;">✕</span></div>`).join('');
-    updateBillCount();
+  function deleteGoal(id) {
+    goals = goals.filter(g => g.id !== id);
+    renderGoals(); calcSavingsOverview(); scheduleSave();
   }
 
-  function updateBillCount(){
-    const paid=bills.filter(b=>b.paid).length,total=bills.length;
-    document.getElementById('bills-count').textContent=paid+' / '+total;
-    document.getElementById('ov-bills').textContent=paid+' / '+total;
+  function renderGoals() {
+    const list = document.getElementById('goals-list');
+    if (!list) return;
+    if (!goals.length) { list.innerHTML = '<div class="card"><p style="font-size:.82rem;color:var(--muted);padding:4px 0;">No goals yet. Add your first savings goal above.</p></div>'; return; }
+    list.innerHTML = goals.map(g => {
+      const pct = Math.min(100, Math.round(g.saved / g.target * 100));
+      const col = pct >= 100 ? 'var(--green)' : pct >= 50 ? 'var(--gold)' : 'var(--red)';
+      return `<div class="goal-card">
+        <div class="goal-header">
+          <div><div class="goal-name">${g.name}</div><div class="goal-meta">Target: GH₵${g.target.toLocaleString()}</div></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="goal-pct" style="color:${col}">${pct}%</span>
+            <span onclick="deleteGoal(${g.id})" style="cursor:pointer;color:var(--muted);font-size:.9rem;">✕</span>
+          </div>
+        </div>
+        <div class="input-row" style="border:none;padding:0 0 10px;">
+          <label style="font-size:.82rem;">Saved so far</label>
+          <div class="input-wrap"><span class="currency">GH₵</span><input type="number" value="${g.saved||''}" placeholder="0.00" oninput="updateGoalSaved(${g.id},this.value)" style="width:110px;padding:7px 10px;font-family:var(--font-m);font-size:.88rem;background:transparent;border:none;outline:none;"/></div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${col};transition:width .5s ease;"></div></div>
+      </div>`;
+    }).join('');
   }
+
+  function calcSavingsOverview() {
+    const totalTarget = goals.reduce((s,g) => s + g.target, 0);
+    const totalSaved = goals.reduce((s,g) => s + g.saved, 0);
+    const sp = totalTarget > 0 ? Math.min(100, Math.round(totalSaved / totalTarget * 100)) : 0;
+    const el = document.getElementById('ov-save-pct');
+    const bar = document.getElementById('ov-save-bar');
+    if (el) el.textContent = sp + '%';
+    if (bar) bar.style.width = sp + '%';
+  }
+
+  function updateGoal(id, val, target) {} // kept for compatibility
+
+  function updateBillCount(){}
 
   function addEntry() {
     const date=document.getElementById('entry-date').value,desc=document.getElementById('entry-desc').value.trim();
