@@ -1,7 +1,7 @@
 {
-  "name": "InkSkript Cashbook",
+  "name": "INKSCRIPT Cashbook",
   "short_name": "Cashbook",
-  "description": "Personal Budget Tracker by InkSkript Co.",
+  "description": "Personal Budget Tracker by INKSCRIPT Co.",
   "start_url": "/money-map/",
   "display": "standalone",
   "background_color": "#1c1a16",
