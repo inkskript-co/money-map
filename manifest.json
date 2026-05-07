@@ -1,0 +1,22 @@
+{
+  "name": "InkSkript Money Map",
+  "short_name": "Money Map",
+  "description": "Ghana Monthly Budget Toolkit by InkSkript Co.",
+  "start_url": "/money-map/",
+  "display": "standalone",
+  "background_color": "#1c1a16",
+  "theme_color": "#1c1a16",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://placehold.co/192x192/c9a84c/1c1a16?text=MM",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://placehold.co/512x512/c9a84c/1c1a16?text=MM",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
