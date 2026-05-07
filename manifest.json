@@ -1,7 +1,7 @@
 {
-  "name": "InkSkript Money Map",
-  "short_name": "Money Map",
-  "description": "Ghana Monthly Budget Toolkit by InkSkript Co.",
+  "name": "InkSkript Cashbook",
+  "short_name": "Cashbook",
+  "description": "Personal Budget Tracker by InkSkript Co.",
   "start_url": "/money-map/",
   "display": "standalone",
   "background_color": "#1c1a16",

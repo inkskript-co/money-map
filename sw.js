@@ -1,4 +1,4 @@
-const CACHE_NAME = 'money-map-v1';
+const CACHE_NAME = 'cashbook-v1';
 const ASSETS = [
   '/money-map/',
   '/money-map/index.html',

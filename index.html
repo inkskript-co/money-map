@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>InkSkript Money Map</title>
-<meta name="description" content="Ghana Monthly Budget Toolkit by InkSkript Co."/>
+<title>InkSkript Cashbook</title>
+<meta name="description" content="Personal Budget Tracker by InkSkript Co."/>
 <meta name="theme-color" content="#1c1a16"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="Money Map"/>
+<meta name="apple-mobile-web-app-title" content="Cashbook"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -149,7 +149,7 @@
   <div class="login-box">
     <div class="login-brand">
       <div class="logo-text">Ink<span>Skript</span> Co.</div>
-      <span class="tagline">Money Map · Ghana Budget Toolkit</span>
+      <span class="tagline">Cashbook · Personal Budget Tracker</span>
     </div>
     <div class="login-title">Enter Your <em>Access Code</em></div>
     <p class="login-sub">You received this code after purchase. Check your email or WhatsApp.</p>
@@ -193,10 +193,12 @@
 <div id="toolkit-screen">
   <div class="cover">
     <div class="cover-inner">
-      <span class="cover-brand">InkSkript Co. · Money Map</span>
+      <span class="cover-brand">InkSkript Co. · Cashbook</span>
       <h1>Your Ghana<br><em>Budget Toolkit</em></h1>
-      <p class="cover-sub">Track. Save. Stay in control — every month.</p>
+      <p class="cover-sub">Track. Budget. Stay in control — every month.</p>
       <div class="month-badge">📅 <strong id="current-month">—</strong> · Your personal copy</div>
+
+
     </div>
   </div>
   <div class="top-bar">
@@ -255,11 +257,26 @@
       <div class="sec-head"><div class="sec-icon green-bg">💰</div><h2>Income This Month</h2></div>
       <div class="card">
         <span class="card-label">Sources</span>
-        <div class="input-row"><label>Salary / wages<small>After tax</small></label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-salary"/></div></div>
-        <div class="input-row"><label>Freelance / side work</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-freelance"/></div></div>
-        <div class="input-row"><label>Business income</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-biz"/></div></div>
-        <div class="input-row"><label>Mobile money received</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-momo"/></div></div>
-        <div class="input-row"><label>Other</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-other"/></div></div>
+        <div class="input-row"><label>Salary / wages<small>After tax</small></label><div style="display:flex;align-items:center;">
+          <select id="inc-salary-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-salary" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Freelance / side work</label><div style="display:flex;align-items:center;">
+          <select id="inc-freelance-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-freelance" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Business income</label><div style="display:flex;align-items:center;">
+          <select id="inc-biz-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-biz" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Mobile money received</label><div style="display:flex;align-items:center;">
+          <select id="inc-momo-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-momo" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Other</label><div style="display:flex;align-items:center;">
+          <select id="inc-other-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="inc-other" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
         <div class="save-indicator" id="save-income">✓ Saved</div>
       </div>
       <div class="card" style="background:rgba(45,106,79,.05);border-color:rgba(45,106,79,.2);">
@@ -276,13 +293,34 @@
       <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px;">Set your spending targets for the month. This is your plan — not what you've spent. Check Summary to compare.</p>
       <div class="card">
         <span class="card-label">Spending Targets</span>
-        <div class="input-row"><label>Food & Groceries</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-food"/></div></div>
-        <div class="input-row"><label>Transport</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-transport"/></div></div>
-        <div class="input-row"><label>Airtime & Data</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-data"/></div></div>
-        <div class="input-row"><label>Health</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-health"/></div></div>
-        <div class="input-row"><label>Personal & Shopping</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-personal"/></div></div>
-        <div class="input-row"><label>Family Support</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-family"/></div></div>
-        <div class="input-row"><label>Other</label><div class="input-wrap"><span class="currency">GH₵</span><input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-other"/></div></div>
+        <div class="input-row"><label>Food & Groceries</label><div style="display:flex;align-items:center;">
+          <select id="bud-food-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-food" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Transport</label><div style="display:flex;align-items:center;">
+          <select id="bud-transport-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-transport" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Airtime & Data</label><div style="display:flex;align-items:center;">
+          <select id="bud-data-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-data" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Health</label><div style="display:flex;align-items:center;">
+          <select id="bud-health-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-health" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Personal & Shopping</label><div style="display:flex;align-items:center;">
+          <select id="bud-personal-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-personal" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Family Support</label><div style="display:flex;align-items:center;">
+          <select id="bud-family-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-family" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
+        <div class="input-row"><label>Other</label><div style="display:flex;align-items:center;">
+          <select id="bud-other-cur" style="width:66px;flex-shrink:0;padding:7px 4px;background:var(--cream);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;font-family:var(--font-m);font-size:.74rem;outline:none;"><option value="GHS">GH₵</option><option value="NGN">₦</option><option value="KES">KSh</option><option value="USD">$</option><option value="GBP">£</option><option value="EUR">€</option><option value="ZAR">R</option><option value="CAD">CA$</option></select>
+          <input type="number" placeholder="0.00" oninput="calc();scheduleSave()" id="bud-other" style="width:90px;padding:7px 8px;font-family:var(--font-m);font-size:.88rem;color:var(--ink);background:var(--cream);border:1px solid var(--border);border-radius:0 8px 8px 0;outline:none;"/>
+        </div></div>
         <div class="save-indicator" id="save-budget">✓ Saved</div>
       </div>
       <div class="card" style="background:rgba(201,168,76,.05);border-color:rgba(201,168,76,.2);">
@@ -306,7 +344,19 @@
             <option>Food</option><option>Transport</option><option>Airtime &amp; Data</option>
             <option>Health</option><option>Personal</option><option>Family</option><option>Other</option>
           </select>
-          <div class="input-wrap"><span class="currency">GH₵</span><input type="number" id="entry-amt" placeholder="0.00" style="width:90px;padding:7px 10px;font-family:var(--font-m);font-size:.85rem;background:transparent;border:none;outline:none;"/></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:6px;">
+          <select id="entry-currency" style="width:110px;flex-shrink:0;padding:9px 10px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-m);font-size:.82rem;outline:none;">
+            <option value="GHS">GH₵</option>
+            <option value="NGN">₦</option>
+            <option value="KES">KSh</option>
+            <option value="USD">$</option>
+            <option value="GBP">£</option>
+            <option value="EUR">€</option>
+            <option value="ZAR">R</option>
+            <option value="CAD">CA$</option>
+          </select>
+          <div class="input-wrap" style="flex:1;"><input type="number" id="entry-amt" placeholder="0.00" style="width:100%;padding:7px 10px;font-family:var(--font-m);font-size:.85rem;background:transparent;border:none;outline:none;"/></div>
         </div>
         <input type="text" id="entry-desc" placeholder="Note (optional — e.g. Trotro to Accra Mall)" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;margin-bottom:6px;"/>
         <button class="big-btn" onclick="addEntry()">+ Log Expense</button>
@@ -403,13 +453,24 @@
   const SUPABASE_URL = 'https://fokooocmdpcapgnaghyp.supabase.co';
   // Register service worker
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/money-map/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/cashbook/sw.js').catch(() => {});
   }
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZva29vb2NtZHBjYXBnbmFnaHlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDk3NDEsImV4cCI6MjA5MzY4NTc0MX0._3jMQqgJGGQt_UIv8VJGhlQvItv2l8yfnZXvLSL40kU';
   const { createClient } = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
   const ADMIN_CODE = 'inkskript-admin-2025';
   let currentMonthKey = new Date().getFullYear() + '-' + String(new Date().getMonth()+1).padStart(2,'0');
+  const CURRENCIES = {
+    'GHS': { symbol: 'GH₵', name: 'Ghana Cedi' },
+    'NGN': { symbol: '₦', name: 'Nigerian Naira' },
+    'KES': { symbol: 'KSh', name: 'Kenyan Shilling' },
+    'USD': { symbol: '$', name: 'US Dollar' },
+    'GBP': { symbol: '£', name: 'British Pound' },
+    'EUR': { symbol: '€', name: 'Euro' },
+    'ZAR': { symbol: 'R', name: 'South African Rand' },
+    'CAD': { symbol: 'CA$', name: 'Canadian Dollar' },
+  };
+  let userCurrency = 'GHS'; // default
   let viewingMonthKey = currentMonthKey;
   let allMonths = {};
   let currentCode = null, saveTimer = null, bills = [], entries = [];
@@ -456,8 +517,23 @@
   async function saveUserData() {
     if (!currentCode || viewingMonthKey !== currentMonthKey) return;
     const monthData = {
-      income: { salary:v('inc-salary'),freelance:v('inc-freelance'),biz:v('inc-biz'),momo:v('inc-momo'),other:v('inc-other') },
-      budget: { food:v('bud-food'),transport:v('bud-transport'),data:v('bud-data'),health:v('bud-health'),personal:v('bud-personal'),family:v('bud-family'),other:v('bud-other') },
+      currency: userCurrency,
+      income: {
+        salary:v('inc-salary'),salary_cur:document.getElementById('inc-salary-cur')?.value||'GHS',
+        freelance:v('inc-freelance'),freelance_cur:document.getElementById('inc-freelance-cur')?.value||'GHS',
+        biz:v('inc-biz'),biz_cur:document.getElementById('inc-biz-cur')?.value||'GHS',
+        momo:v('inc-momo'),momo_cur:document.getElementById('inc-momo-cur')?.value||'GHS',
+        other:v('inc-other'),other_cur:document.getElementById('inc-other-cur')?.value||'GHS'
+      },
+      budget: {
+        food:v('bud-food'),food_cur:document.getElementById('bud-food-cur')?.value||'GHS',
+        transport:v('bud-transport'),transport_cur:document.getElementById('bud-transport-cur')?.value||'GHS',
+        data:v('bud-data'),data_cur:document.getElementById('bud-data-cur')?.value||'GHS',
+        health:v('bud-health'),health_cur:document.getElementById('bud-health-cur')?.value||'GHS',
+        personal:v('bud-personal'),personal_cur:document.getElementById('bud-personal-cur')?.value||'GHS',
+        family:v('bud-family'),family_cur:document.getElementById('bud-family-cur')?.value||'GHS',
+        other:v('bud-other'),other_cur:document.getElementById('bud-other-cur')?.value||'GHS'
+      },
       savings: { susu:v('sav-susu'),susu_month:document.getElementById('sav-susu-month')?.value||'',goals:goals },
       bills, entries,
       reflect: { q1:document.getElementById('ref-q1')?.value||'',q2:document.getElementById('ref-q2')?.value||'',q3:document.getElementById('ref-q3')?.value||'',mood:document.querySelector('.mood-btn.selected')?.textContent||'' }
@@ -497,13 +573,35 @@
     document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
     document.getElementById('sav-susu-month').value='';
     if (!d) { renderBills(); renderEntries(); calc(); renderSummary(); return; }
-    if (d.income) { setVal('inc-salary',d.income.salary);setVal('inc-freelance',d.income.freelance);setVal('inc-biz',d.income.biz);setVal('inc-momo',d.income.momo);setVal('inc-other',d.income.other); }
-    if (d.budget) { setVal('bud-food',d.budget.food);setVal('bud-transport',d.budget.transport);setVal('bud-data',d.budget.data);setVal('bud-health',d.budget.health);setVal('bud-personal',d.budget.personal);setVal('bud-family',d.budget.family);setVal('bud-other',d.budget.other); }
+    if (d.income) {
+      setVal('inc-salary',d.income.salary);setCur('inc-salary-cur',d.income.salary_cur);
+      setVal('inc-freelance',d.income.freelance);setCur('inc-freelance-cur',d.income.freelance_cur);
+      setVal('inc-biz',d.income.biz);setCur('inc-biz-cur',d.income.biz_cur);
+      setVal('inc-momo',d.income.momo);setCur('inc-momo-cur',d.income.momo_cur);
+      setVal('inc-other',d.income.other);setCur('inc-other-cur',d.income.other_cur);
+    }
+    if (d.budget) {
+      setVal('bud-food',d.budget.food);setCur('bud-food-cur',d.budget.food_cur);
+      setVal('bud-transport',d.budget.transport);setCur('bud-transport-cur',d.budget.transport_cur);
+      setVal('bud-data',d.budget.data);setCur('bud-data-cur',d.budget.data_cur);
+      setVal('bud-health',d.budget.health);setCur('bud-health-cur',d.budget.health_cur);
+      setVal('bud-personal',d.budget.personal);setCur('bud-personal-cur',d.budget.personal_cur);
+      setVal('bud-family',d.budget.family);setCur('bud-family-cur',d.budget.family_cur);
+      setVal('bud-other',d.budget.other);setCur('bud-other-cur',d.budget.other_cur);
+    }
     if (d.savings) { setVal('sav-susu',d.savings.susu);if(d.savings.susu_month)document.getElementById('sav-susu-month').value=d.savings.susu_month;if(d.savings.goals&&Array.isArray(d.savings.goals)){goals=d.savings.goals;renderGoals();calcSavingsOverview();} }
     bills=[];
     if (d.entries&&Array.isArray(d.entries)) { entries=d.entries; } renderEntries();
     if (d.savings&&d.savings.goals&&Array.isArray(d.savings.goals)){goals=d.savings.goals;}else{goals=[];} renderGoals(); calcSavingsOverview();
     if (d.reflect) { if(d.reflect.q1)document.getElementById('ref-q1').value=d.reflect.q1;if(d.reflect.q2)document.getElementById('ref-q2').value=d.reflect.q2;if(d.reflect.q3)document.getElementById('ref-q3').value=d.reflect.q3;if(d.reflect.mood)document.querySelectorAll('.mood-btn').forEach(b=>{if(b.textContent===d.reflect.mood)b.classList.add('selected');}); }
+    // Load currency preference
+    const firstMonth = Object.values(allMonths)[0];
+    if (firstMonth?.currency) {
+      userCurrency = firstMonth.currency;
+      const sel = document.getElementById('currency-selector');
+      if (sel) sel.value = userCurrency;
+      changeCurrency(userCurrency);
+    }
     calc(); renderSummary();
     // Update readonly state
     const isReadOnly = viewingMonthKey !== currentMonthKey;
@@ -531,6 +629,7 @@
   }
 
   function setVal(id,val) { const el=document.getElementById(id); if(el&&val)el.value=val; }
+  function setCur(id,val) { const el=document.getElementById(id); if(el&&val)el.value=val; }
 
   async function loadAdminCodes() {
     const { data } = await sb.from('customers').select('*').order('created_at',{ascending:false});
@@ -564,18 +663,31 @@
   }
 
   function v(id){return parseFloat(document.getElementById(id)?.value)||0;}
-  function fmt(n){return 'GH₵ '+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+  function fmt(n){return getCurrencySymbol()+' '+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
 
   function calc() {
     const income=v('inc-salary')+v('inc-freelance')+v('inc-biz')+v('inc-momo')+v('inc-other');
-    document.getElementById('inc-total').textContent=fmt(income);
+    // Income by currency
+    const incByCur={};
+    ['inc-salary','inc-freelance','inc-biz','inc-momo','inc-other'].forEach(id=>{
+      const val=parseFloat(document.getElementById(id)?.value)||0;
+      if(val){const c=document.getElementById(id+'-cur')?.value||'GHS';incByCur[c]=(incByCur[c]||0)+val;}
+    });
+    document.getElementById('inc-total').textContent=Object.entries(incByCur).map(([c,a])=>(CURRENCIES[c]?.symbol||c)+' '+a.toFixed(2)).join('  +  ')||'0.00';
     const budgetTotal=v('bud-food')+v('bud-transport')+v('bud-data')+v('bud-health')+v('bud-personal')+v('bud-family')+v('bud-other');
-    document.getElementById('bud-total').textContent=fmt(budgetTotal);
+    // Budget by currency
+    const budByCur={};
+    ['bud-food','bud-transport','bud-data','bud-health','bud-personal','bud-family','bud-other'].forEach(id=>{
+      const val=parseFloat(document.getElementById(id)?.value)||0;
+      if(val){const c=document.getElementById(id+'-cur')?.value||'GHS';budByCur[c]=(budByCur[c]||0)+val;}
+    });
+    document.getElementById('bud-total').textContent=Object.entries(budByCur).map(([c,a])=>(CURRENCIES[c]?.symbol||c)+' '+a.toFixed(2)).join('  +  ')||'0.00';
     const now=new Date(), thisMonth=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
     const monthSpent=entries.filter(e=>e.date.startsWith(thisMonth)).reduce((s,e)=>s+parseFloat(e.amt),0);
-    document.getElementById('ov-income').textContent='GH₵'+Math.round(income).toLocaleString();
-    document.getElementById('ov-spent').textContent='GH₵'+Math.round(monthSpent).toLocaleString();
-    document.getElementById('ov-left').textContent='GH₵'+Math.round(income-monthSpent).toLocaleString();
+    const sym=getCurrencySymbol();
+    document.getElementById('ov-income').textContent=sym+Math.round(income).toLocaleString();
+    document.getElementById('ov-spent').textContent=sym+Math.round(monthSpent).toLocaleString();
+    document.getElementById('ov-left').textContent=sym+Math.round(income-monthSpent).toLocaleString();
     const pct=budgetTotal>0?Math.min(100,Math.round(monthSpent/budgetTotal*100)):0;
     document.getElementById('ov-pct').textContent=pct+'%';
     const bar=document.getElementById('ov-bar');bar.style.width=pct+'%';
@@ -654,8 +766,9 @@
   function addEntry() {
     const date=document.getElementById('entry-date').value,desc=document.getElementById('entry-desc').value.trim();
     const cat=document.getElementById('entry-cat').value,amt=parseFloat(document.getElementById('entry-amt').value)||0;
-    if(!date||!desc||!amt)return;
-    entries.push({id:Date.now(),date,desc,cat,amt});
+    const currency=document.getElementById('entry-currency')?.value||'GHS';
+    if(!date||!amt)return;
+    entries.push({id:Date.now(),date,desc,cat,amt,currency});
     entries.sort((a,b)=>new Date(b.date)-new Date(a.date));
     document.getElementById('entry-desc').value='';document.getElementById('entry-amt').value='';
     renderEntries();calc();renderSummary();scheduleSave();
@@ -666,7 +779,11 @@
   function renderEntries(){
     const list=document.getElementById('entries-list');
     if(!entries.length){list.innerHTML='<p style="font-size:.82rem;color:var(--muted);padding:8px 0;">No entries yet.</p>';return;}
-    list.innerHTML=entries.slice(0,30).map(e=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);"><div style="flex:1;"><div style="font-size:.88rem;font-weight:500;">${e.desc}</div><div style="font-size:.72rem;color:var(--muted);">${e.cat} · ${fmtDate(e.date)}</div></div><span style="font-family:var(--font-m);font-size:.85rem;color:var(--red);">GH₵${parseFloat(e.amt).toFixed(2)}</span><span onclick="deleteEntry(${e.id})" style="cursor:pointer;color:var(--muted);font-size:.9rem;padding:0 4px;">✕</span></div>`).join('');
+    list.innerHTML=entries.slice(0,30).map(e=>{
+      const sym=CURRENCIES[e.currency||'GHS']?.symbol||'GH₵';
+      const label=e.desc||e.cat;
+      return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);"><div style="flex:1;"><div style="font-size:.88rem;font-weight:500;">${label}</div><div style="font-size:.72rem;color:var(--muted);">${e.cat} · ${fmtDate(e.date)}</div></div><span style="font-family:var(--font-m);font-size:.85rem;color:var(--red);">${sym}${parseFloat(e.amt).toFixed(2)}</span><span onclick="deleteEntry(${e.id})" style="cursor:pointer;color:var(--muted);font-size:.9rem;padding:0 4px;">✕</span></div>`;
+    }).join('');
   }
 
   function fmtDate(d){const dt=new Date(d+'T00:00:00');return dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
@@ -684,13 +801,32 @@
     const wkEl=document.getElementById('week-summary');
     if(!weekE.length){wkEl.innerHTML='<p style="font-size:.82rem;color:var(--muted);">No entries this week yet.</p>';}
     else{const byCat={};weekE.forEach(e=>{byCat[e.cat]=(byCat[e.cat]||0)+parseFloat(e.amt);});wkEl.innerHTML=Object.entries(byCat).map(([cat,amt])=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.85rem;"><span>${cat}</span><span style="font-family:var(--font-m);color:var(--red);">GH₵${amt.toFixed(2)}</span></div>`).join('');}
-    document.getElementById('week-total').textContent=fmt(weekE.reduce((s,e)=>s+parseFloat(e.amt),0));
+    // Week total grouped by currency
+    const weekByCur={};
+    weekE.forEach(e=>{const c=e.currency||'GHS';weekByCur[c]=(weekByCur[c]||0)+parseFloat(e.amt);});
+    document.getElementById('week-total').textContent=Object.entries(weekByCur).map(([c,a])=>(CURRENCIES[c]?.symbol||c)+' '+a.toFixed(2)).join(' + ')||'0.00';
     const wkTots={1:0,2:0,3:0,4:0};monthE.forEach(e=>{wkTots[getWeek(e.date)]+=parseFloat(e.amt);});
     document.getElementById('month-weeks-summary').innerHTML=[1,2,3,4].map(w=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.85rem;"><span style="font-weight:${w===thisWeek?700:400};color:${w===thisWeek?'var(--ink)':'var(--muted)'};">Week ${w}${w===thisWeek?' ← now':''}</span><span style="font-family:var(--font-m);color:${wkTots[w]>0?'var(--red)':'var(--muted)'};">GH₵${wkTots[w].toFixed(2)}</span></div>`).join('');
-    document.getElementById('month-total-exp').textContent=fmt(monthE.reduce((s,e)=>s+parseFloat(e.amt),0));
+    const monthByCur={};
+    monthE.forEach(e=>{const c=e.currency||'GHS';monthByCur[c]=(monthByCur[c]||0)+parseFloat(e.amt);});
+    document.getElementById('month-total-exp').textContent=Object.entries(monthByCur).map(([c,a])=>(CURRENCIES[c]?.symbol||c)+' '+a.toFixed(2)).join(' + ')||'0.00';
   }
 
   function selectMood(el){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');scheduleSave();}
+
+  function changeCurrency(code) {
+    userCurrency = code;
+    const sym = CURRENCIES[code].symbol;
+    // Update all currency labels
+    document.querySelectorAll('.currency').forEach(el => el.textContent = sym);
+    // Update overview labels
+    calc(); renderSummary();
+    scheduleSave();
+  }
+
+  function getCurrencySymbol() {
+    return CURRENCIES[userCurrency]?.symbol || 'GH₵';
+  }
 
   function setMonthInfo(){
     const now=new Date();
