@@ -255,7 +255,8 @@
       <button class="tab" onclick="showPage('expenses',this)">Expenses</button>
       <button class="tab" onclick="showPage('savings',this)">Savings</button>
       <button class="tab" onclick="showPage('bills',this)">Bills</button>
-      <button class="tab" onclick="showPage('weekly',this)">Weekly</button>
+      <button class="tab" onclick="showPage('daily',this)">Daily Log</button>
+      <button class="tab" onclick="showPage('summary',this)">Summary</button>
       <button class="tab" onclick="showPage('reflect',this)">Reflect</button>
     </div>
   </div>
@@ -390,16 +391,70 @@
     </div>
   </div>
 
-  <!-- WEEKLY -->
-  <div class="page" id="page-weekly">
+  <!-- DAILY LOG -->
+  <div class="page" id="page-daily">
     <div style="margin-top:20px;">
-      <div class="sec-head"><div class="sec-icon gold-bg">📆</div><h2>Weekly Spending</h2></div>
-      <p style="font-size:0.82rem;margin-bottom:16px;">Break down spending week by week.</p>
-      <div class="week-grid">
-        <div class="week-card"><div class="wk-title">Week 1</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
-        <div class="week-card"><div class="wk-title">Week 2</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
-        <div class="week-card"><div class="wk-title">Week 3</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
-        <div class="week-card"><div class="wk-title">Week 4</div><div class="wk-item"><span>Market</span><span>—</span></div><div class="wk-item"><span>Transport</span><span>—</span></div><div class="wk-item"><span>Airtime</span><span>—</span></div><div class="wk-item"><span>Eating out</span><span>—</span></div><div class="wk-total" style="color:var(--muted);">GH₵ 0</div></div>
+      <div class="sec-head"><div class="sec-icon gold-bg">📝</div><h2>Daily Spending Log</h2></div>
+      <p style="font-size:0.82rem;margin-bottom:16px;">Log what you spend each day. Weekly and monthly totals update automatically.</p>
+
+      <div class="card">
+        <span class="card-label">Add an Entry</span>
+        <div style="margin-bottom:8px;">
+          <input type="date" id="entry-date" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.85rem;outline:none;margin-bottom:8px;"/>
+          <input type="text" id="entry-desc" placeholder="What was it? (e.g. Trotro, Lunch, Data)" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.85rem;outline:none;margin-bottom:8px;"/>
+          <div style="display:flex;gap:8px;">
+            <select id="entry-cat" style="flex:1;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:0.85rem;outline:none;">
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Airtime & Data">Airtime & Data</option>
+              <option value="Health">Health</option>
+              <option value="Personal">Personal</option>
+              <option value="Family">Family</option>
+              <option value="Other">Other</option>
+            </select>
+            <div class="input-wrap" style="flex-shrink:0;"><span class="currency">GH₵</span><input type="number" id="entry-amt" placeholder="0.00" style="width:90px;padding:7px 10px;font-family:var(--font-m);font-size:0.85rem;background:transparent;border:none;outline:none;"/></div>
+          </div>
+        </div>
+        <button onclick="addEntry()" style="width:100%;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-family:var(--font-b);font-weight:600;font-size:0.88rem;cursor:pointer;margin-top:4px;">+ Log Expense</button>
+      </div>
+
+      <div class="card">
+        <span class="card-label">Recent Entries</span>
+        <div id="entries-list"><p style="font-size:0.82rem;color:var(--muted);padding:8px 0;">No entries yet. Log your first expense above.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="page" id="page-summary">
+    <div style="margin-top:20px;">
+      <div class="sec-head"><div class="sec-icon green-bg">📊</div><h2>Spending Summary</h2></div>
+      <p style="font-size:0.82rem;margin-bottom:16px;">Auto-calculated from your daily entries.</p>
+
+      <!-- Weekly breakdown -->
+      <div class="card">
+        <span class="card-label">This Week</span>
+        <div id="week-summary"><p style="font-size:0.82rem;color:var(--muted);">No entries this week yet.</p></div>
+        <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.82rem;font-weight:600;">Week Total</span>
+          <span style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:var(--red);" id="week-total">GH₵ 0.00</span>
+        </div>
+      </div>
+
+      <!-- Monthly by week -->
+      <div class="card">
+        <span class="card-label">This Month by Week</span>
+        <div id="month-weeks-summary"></div>
+        <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:0.82rem;font-weight:600;">Month Total Spent</span>
+          <span style="font-family:var(--font-d);font-size:1.3rem;font-weight:700;color:var(--red);" id="month-total-exp">GH₵ 0.00</span>
+        </div>
+      </div>
+
+      <!-- By category -->
+      <div class="card">
+        <span class="card-label">This Month by Category</span>
+        <div id="cat-summary"><p style="font-size:0.82rem;color:var(--muted);">No entries this month yet.</p></div>
       </div>
     </div>
   </div>
@@ -530,6 +585,7 @@
         goal1: v('goal1-input'), goal2: v('goal2-input'), goal3: v('goal3-input')
       },
       bills: bills,
+      entries: entries,
       reflect: {
         q1: document.getElementById('ref-q1')?.value || '',
         q2: document.getElementById('ref-q2')?.value || '',
@@ -558,6 +614,8 @@
     if (d.savings) { setVal('sav-susu', d.savings.susu); if (d.savings.susu_month) document.getElementById('sav-susu-month').value = d.savings.susu_month; setVal('goal1-input', d.savings.goal1); setVal('goal2-input', d.savings.goal2); setVal('goal3-input', d.savings.goal3); updateGoal('goal1', d.savings.goal1, 800); updateGoal('goal2', d.savings.goal2, 2000); updateGoal('goal3', d.savings.goal3, 500); }
     // Bills
     if (d.bills && Array.isArray(d.bills)) { bills = d.bills; renderBills(); }
+    // Entries
+    if (d.entries && Array.isArray(d.entries)) { entries = d.entries; renderEntries(); renderSummary(); }
     // Reflect
     if (d.reflect) { if (d.reflect.q1) document.getElementById('ref-q1').value = d.reflect.q1; if (d.reflect.q2) document.getElementById('ref-q2').value = d.reflect.q2; if (d.reflect.q3) document.getElementById('ref-q3').value = d.reflect.q3; if (d.reflect.mood) { document.querySelectorAll('.mood-btn').forEach(b => { if (b.textContent === d.reflect.mood) b.classList.add('selected'); }); } }
 
@@ -697,6 +755,118 @@
     document.getElementById('ov-bills').textContent = paid + ' / ' + total;
   }
 
+  // ── Daily Entries ──
+  let entries = []; // [{id, date, desc, cat, amt}]
+
+  function addEntry() {
+    const date = document.getElementById('entry-date').value;
+    const desc = document.getElementById('entry-desc').value.trim();
+    const cat  = document.getElementById('entry-cat').value;
+    const amt  = parseFloat(document.getElementById('entry-amt').value) || 0;
+    if (!date || !desc || !amt) return;
+    entries.push({ id: Date.now(), date, desc, cat, amt });
+    entries.sort((a,b) => new Date(b.date) - new Date(a.date));
+    document.getElementById('entry-desc').value = '';
+    document.getElementById('entry-amt').value = '';
+    renderEntries();
+    renderSummary();
+    scheduleSave();
+  }
+
+  function deleteEntry(id) {
+    entries = entries.filter(e => e.id !== id);
+    renderEntries();
+    renderSummary();
+    scheduleSave();
+  }
+
+  function renderEntries() {
+    const list = document.getElementById('entries-list');
+    if (entries.length === 0) {
+      list.innerHTML = '<p style="font-size:0.82rem;color:var(--muted);padding:8px 0;">No entries yet.</p>';
+      return;
+    }
+    // Show last 20
+    const recent = entries.slice(0, 20);
+    list.innerHTML = recent.map(e => `
+      <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">
+        <div style="flex:1;">
+          <div style="font-size:0.88rem;font-weight:500;">${e.desc}</div>
+          <div style="font-size:0.72rem;color:var(--muted);">${e.cat} · ${formatDate(e.date)}</div>
+        </div>
+        <span style="font-family:var(--font-m);font-size:0.88rem;color:var(--red);">GH₵${parseFloat(e.amt).toFixed(2)}</span>
+        <span onclick="deleteEntry(${e.id})" style="cursor:pointer;color:var(--muted);font-size:0.9rem;padding:0 4px;">✕</span>
+      </div>
+    `).join('');
+  }
+
+  function formatDate(d) {
+    const dt = new Date(d + 'T00:00:00');
+    return dt.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+  }
+
+  function getWeekNumber(date) {
+    const d = new Date(date + 'T00:00:00');
+    const day = d.getDate();
+    if (day <= 7) return 1;
+    if (day <= 14) return 2;
+    if (day <= 21) return 3;
+    return 4;
+  }
+
+  function renderSummary() {
+    const now = new Date();
+    const thisMonth = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+    const thisWeek  = getWeekNumber(now.toISOString().slice(0,10));
+
+    const monthEntries = entries.filter(e => e.date.startsWith(thisMonth));
+    const weekEntries  = monthEntries.filter(e => getWeekNumber(e.date) === thisWeek);
+
+    // This week summary
+    const weekEl = document.getElementById('week-summary');
+    if (weekEntries.length === 0) {
+      weekEl.innerHTML = '<p style="font-size:0.82rem;color:var(--muted);">No entries this week yet.</p>';
+    } else {
+      const byCat = {};
+      weekEntries.forEach(e => { byCat[e.cat] = (byCat[e.cat]||0) + parseFloat(e.amt); });
+      weekEl.innerHTML = Object.entries(byCat).map(([cat,amt]) => `
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:0.85rem;">
+          <span>${cat}</span><span style="font-family:var(--font-m);color:var(--red);">GH₵${amt.toFixed(2)}</span>
+        </div>`).join('');
+    }
+    const weekTotal = weekEntries.reduce((s,e) => s + parseFloat(e.amt), 0);
+    document.getElementById('week-total').textContent = fmt(weekTotal);
+
+    // Month by week
+    const weeksEl = document.getElementById('month-weeks-summary');
+    const weekTotals = {1:0,2:0,3:0,4:0};
+    monthEntries.forEach(e => { weekTotals[getWeekNumber(e.date)] += parseFloat(e.amt); });
+    weeksEl.innerHTML = [1,2,3,4].map(w => `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.85rem;">
+        <span style="font-weight:${w===thisWeek?'700':'400'};color:${w===thisWeek?'var(--ink)':'var(--muted)'};">Week ${w}${w===thisWeek?' (current)':''}</span>
+        <span style="font-family:var(--font-m);color:${weekTotals[w]>0?'var(--red)':'var(--muted)'};">GH₵${weekTotals[w].toFixed(2)}</span>
+      </div>`).join('');
+    const monthTotal = monthEntries.reduce((s,e) => s + parseFloat(e.amt), 0);
+    document.getElementById('month-total-exp').textContent = fmt(monthTotal);
+
+    // By category this month
+    const catEl = document.getElementById('cat-summary');
+    if (monthEntries.length === 0) {
+      catEl.innerHTML = '<p style="font-size:0.82rem;color:var(--muted);">No entries this month yet.</p>';
+    } else {
+      const byCat = {};
+      monthEntries.forEach(e => { byCat[e.cat] = (byCat[e.cat]||0) + parseFloat(e.amt); });
+      const sorted = Object.entries(byCat).sort((a,b) => b[1]-a[1]);
+      catEl.innerHTML = sorted.map(([cat,amt]) => `
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.85rem;">
+          <span>${cat}</span><span style="font-family:var(--font-m);color:var(--red);">GH₵${amt.toFixed(2)}</span>
+        </div>`).join('');
+    }
+
+    // Update overview spent from daily entries
+    document.getElementById('ov-spent').textContent = 'GH₵' + Math.round(monthTotal).toLocaleString();
+  }
+
   function selectMood(el) {
     document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
     el.classList.add('selected');
@@ -708,6 +878,8 @@
     document.getElementById('current-month').textContent = now.toLocaleString('en-GB', { month: 'long', year: 'numeric' });
     const day = now.getDate(), total = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
     document.getElementById('days-count').textContent = day + ' / ' + total;
+    // Set today's date as default in entry form
+    document.getElementById('entry-date').value = now.toISOString().slice(0,10);
   }
 
   // Need to add 'data' column to Supabase - handled via SQL below
