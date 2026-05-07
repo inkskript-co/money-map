@@ -303,14 +303,14 @@
       <div class="card">
         <span class="card-label">Log an Expense</span>
         <input type="date" id="entry-date" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;margin-bottom:8px;"/>
-        <input type="text" id="entry-desc" placeholder="What was it? (e.g. Trotro, Lunch, Data)" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;margin-bottom:8px;"/>
-        <div style="display:flex;gap:8px;margin-bottom:6px;">
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
           <select id="entry-cat" style="flex:1;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;">
             <option>Food</option><option>Transport</option><option>Airtime &amp; Data</option>
             <option>Health</option><option>Personal</option><option>Family</option><option>Other</option>
           </select>
           <div class="input-wrap"><span class="currency">GH₵</span><input type="number" id="entry-amt" placeholder="0.00" style="width:90px;padding:7px 10px;font-family:var(--font-m);font-size:.85rem;background:transparent;border:none;outline:none;"/></div>
         </div>
+        <input type="text" id="entry-desc" placeholder="Note (optional — e.g. Trotro to Accra Mall)" style="width:100%;padding:9px 12px;background:var(--cream);border:1px solid var(--border);border-radius:8px;font-family:var(--font-b);font-size:.85rem;outline:none;margin-bottom:6px;"/>
         <button class="big-btn" onclick="addEntry()">+ Log Expense</button>
       </div>
       <div class="card">
